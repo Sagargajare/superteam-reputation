@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 import { HiSearch } from 'react-icons/hi';
+import SwipeableViews from 'react-swipeable-views';
 import { dashboardDataType } from '../../interfaces/dashboardStore';
 import { filteredData } from '../../util/filterData';
 import EnhancedTable from './Leaderboard';
@@ -54,6 +55,13 @@ const LeaderBoardWrapper = ({ dashboardData }: propsType) => {
 
     setData(newFilter);
   };
+  const [tabIndex, setTabIndex] = React.useState(0);
+  const handleChangeIndex = (index: number) => {
+    setTabIndex(index);
+  };
+  const handleChange = (index: number) => {
+    setTabIndex(index);
+  };
   return (
     <Container fontFamily={'Inter'} maxW="full" p="1rem">
       <VStack maxW="7xl" mx="auto" align={'start'} justify="start" py="1rem">
@@ -64,10 +72,12 @@ const LeaderBoardWrapper = ({ dashboardData }: propsType) => {
           w="full"
           borderBottom={'1px solid'}
           borderColor="superteamBlack.200"
-          onDrag={() => {
+          onDrag={(e) => {
             //todo: add draggable tabs for mobile ( on right drag tab should change to the next right tab ) console.log('tab dragged');
             // to implement it find a function or hook that can be changed to change the index of current tab
           }}
+          index={tabIndex}
+          onChange={handleChange}
         >
           <TabList
             gap="2rem"
@@ -316,7 +326,18 @@ const LeaderBoardWrapper = ({ dashboardData }: propsType) => {
               />
             </InputGroup>
           </Flex>
-          <TabPanels p="0">
+
+          <TabPanels
+            p="0"
+            as={SwipeableViews}
+            index={tabIndex}
+            onChangeIndex={handleChangeIndex}
+            springConfig={{
+              duration: '0s',
+              easeFunction: '...',
+              delay: '0s',
+            }}
+          >
             <TabPanel p="0">
               <EnhancedTable row={allXPData} searching={searching} />
             </TabPanel>
